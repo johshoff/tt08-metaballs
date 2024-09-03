@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2024 Your Name
+ * Copyright (c) 2024 Johannes Hoff
  * SPDX-License-Identifier: Apache-2.0
  */
 
 `default_nettype none
 
-module tt_um_example (
+module tt_um_johshoff_metaballs (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -15,13 +15,33 @@ module tt_um_example (
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
 );
+  wire rgb, display;
+  wire[9:0] x;
+  wire[9:0] y;
 
-  // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+  wire h_sync;
+  wire v_sync;
+  assign uo_out = {h_sync, rgb, rgb, rgb, v_sync, rgb, rgb, rgb};
   assign uio_out = 0;
-  assign uio_oe  = 0;
+  assign uio_oe = 0;
+
+  metaballs mb(
+    rgb, v_sync,
+    display,
+    x,
+    y
+  );
+
+  vga v(
+    clk,
+    ~rst_n,
+    h_sync, v_sync,
+    display,
+    x,
+    y
+  );
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+  wire _unused = &{ena, ui_in, uio_in, 1'b0};
 
 endmodule
