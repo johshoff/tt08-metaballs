@@ -161,13 +161,13 @@ module metaballs(
 	wire[14:0] dist_sq_0;
 	wire overflow_0;
 	ball b_0(x, y, dist_sq_0, overflow_0, v_sync);
-	wire[14:0] dist_sq_1;
-	wire overflow_1;
-	ball #(.START_X(10), .START_Y(50)) b_1(x, y, dist_sq_1, overflow_1, v_sync);
+	// wire[14:0] dist_sq_1;
+	// wire overflow_1;
+	// ball #(.START_X(10), .START_Y(50)) b_1(x, y, dist_sq_1, overflow_1, v_sync);
 
 	reg pix = 0;
 	always @(posedge x[0]) begin
-		pix <= (!overflow_0 && dist_sq_0 < 625) || (!overflow_1 && dist_sq_1 < 625);
+		pix <= (!overflow_0 && dist_sq_0 < 625); // || (!overflow_1 && dist_sq_1 < 625);
 	end
 
 	assign rgb = display && pix;
