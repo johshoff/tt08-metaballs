@@ -5,7 +5,7 @@ project:
   discord:      "johannes"      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
   description:  "You can't prove it's not metaballs"      # One line description of what your project does
   language:     "Verilog"
-  clock_hz:     100000000       # 100 MHz (double of pixel frequency)
+  clock_hz:     50000000       # 50 MHz (pixel frequency)
   tiles: "1x1"
   top_module:  "tt_um_johshoff_metaballs"
 

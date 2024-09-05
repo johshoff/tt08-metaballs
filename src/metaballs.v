@@ -1,7 +1,7 @@
 `default_nettype none
 
 module vga(
-	input wire clk_100mhz,
+	input wire clk_50mhz,
 	input wire reset,
 	output reg h_sync,
 	output reg v_sync,
@@ -15,26 +15,23 @@ module vga(
 	// separator, and mm is the fractional microsecond.
 
 	// 800x600 @ 72Hz
-	parameter H_TIME_VISIBLE_AREA  = 16_00,
-		      H_TIME_FRONT_PORCH   =  1_12,
-		      H_TIME_SYNC_PULSE    =  2_40,
-		      H_TIME_WHOLE_LINE    = 20_80,
+	parameter H_TIME_VISIBLE_AREA  =  8_00,
+		      H_TIME_FRONT_PORCH   =    56,
+		      H_TIME_SYNC_PULSE    =  1_20,
+		      H_TIME_WHOLE_LINE    = 10_40,
 
 		      V_LINES_VISIBLE_AREA =   600,
 		      V_LINES_FRONT_PORCH  =    37,
 		      V_LINES_SYNC_PULSE   =     6,
-		      V_LINES_WHOLE_FRAME  =   666,
+		      V_LINES_WHOLE_FRAME  =   666;
 
-		      H_LOG_DIVISOR        =     1; // 50MHz pixel clock
-
-	reg[11:0] h_counter;
+	reg[10:0] h_counter;
 	reg h_display;
 	reg v_display;
 	assign display = h_display & v_display;
-	assign x = h_counter[10:H_LOG_DIVISOR]; // 50MHz pixel clock
-	// wire half_x = h_counter[0];
+	assign x = h_counter[9:0];
 
-	always @(posedge clk_100mhz) begin
+	always @(posedge clk_50mhz) begin
 		// 0.00000001s = 0.00001ms = 0.01us
 		// (31_77+1) * 0.01 = 31.78us
 		//if (h_counter == 31_77) begin
