@@ -381,7 +381,7 @@ module metaballs
 	parameter SCREEN_HEIGHT = 600
 )
 (
-	output wire[1:0] rgb,
+	output wire rgb,
 	input wire v_sync,
 
 	input wire display,
@@ -393,13 +393,9 @@ module metaballs
 	wire[7:0] out_1;
 	ball #(.SCREEN_WIDTH(SCREEN_WIDTH), .SCREEN_HEIGHT(SCREEN_HEIGHT), .START_X((SCREEN_WIDTH-128)*19/30), .START_Y((SCREEN_HEIGHT-128)*12/30)) b_1(x, y, out_1, v_sync);
 
-	reg[1:0] pix = 0;
-	wire[8:0] sum = out_0 + out_1;
+	reg pix = 0;
 	always @(posedge x[0]) begin
-		pix <= sum > 10 ? 3
-			: sum > 9 ? 2
-			: sum > 8 ? 1
-			: 0;
+		pix <= out_0 + out_1 > 10;
 	end
 
 	assign rgb = display ? pix : 0;
