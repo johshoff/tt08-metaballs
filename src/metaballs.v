@@ -85,7 +85,9 @@ module ball
 );
 	reg[7:0] bs[0:255];
 
+	/* verilator lint_off WIDTHTRUNC */
 	reg[9:0] ball_x = START_X;
+	/* verilator lint_off WIDTHTRUNC */
 	reg[9:0] ball_y = START_Y;
 	reg[9:0] ball_vx = 0;
 	reg[9:0] ball_vy = 0;
