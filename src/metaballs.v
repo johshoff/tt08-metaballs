@@ -395,7 +395,7 @@ module metaballs
 
 	reg pix = 0;
 	always @(posedge x[0]) begin
-		pix <= out_0 + out_1 > 10;
+		pix <= out_0 + out_1 > 8;
 	end
 
 	assign rgb = display ? pix : 0;
