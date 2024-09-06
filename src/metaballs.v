@@ -85,9 +85,10 @@ module ball
 );
 	reg[7:0] bs[0:255];
 
-
-	reg[11:0] ball_fix_x = { START_X, 2'b0 }[11:0];
-	reg[11:0] ball_fix_y = { START_Y, 2'b0 }[11:0];
+	/* verilator lint_off WIDTHTRUNC */
+	reg[11:0] ball_fix_x = START_X;
+	/* verilator lint_off WIDTHTRUNC */
+	reg[11:0] ball_fix_y = START_Y;
 	wire[9:0] ball_x = ball_fix_x[11:2];
 	wire[9:0] ball_y = ball_fix_y[11:2];
 	reg[9:0] ball_vx = 0;
