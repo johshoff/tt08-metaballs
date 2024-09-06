@@ -104,11 +104,11 @@ module ball
 	wire[9:0] next_y = ball_y + { {2{ball_vy[9]}}, ball_vy[9:2] };
 
 	always @(posedge v_sync) begin
-		ball_x <= next_x > 0 && next_x < SCREEN_WIDTH  - 128 ? next_x : ball_x;
-		ball_y <= next_y > 0 && next_y < SCREEN_HEIGHT - 128 ? next_y : ball_y;
+		ball_x <= next_x;
+		ball_y <= next_y;
 
-		ball_vx <= ball_vx + (ball_x < SCREEN_WIDTH /2 ? 1 : -1);
-		ball_vy <= ball_vy + (ball_y < SCREEN_HEIGHT/2 ? 1 : -1);
+		ball_vx <= ball_vx + (next_x < (SCREEN_WIDTH -128)/2 ? 1 : -1);
+		ball_vy <= ball_vy + (next_y < (SCREEN_HEIGHT-128)/2 ? 1 : -1);
 	end
 
 	initial begin
