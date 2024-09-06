@@ -85,8 +85,9 @@ module ball
 );
 	reg[7:0] bs[0:255];
 
-	reg[11:0] ball_fix_x = { START_X, 2'b0 };
-	reg[11:0] ball_fix_y = { START_Y, 2'b0 };
+
+	reg[11:0] ball_fix_x = { START_X, 2'b0 }[11:0];
+	reg[11:0] ball_fix_y = { START_Y, 2'b0 }[11:0];
 	wire[9:0] ball_x = ball_fix_x[11:2];
 	wire[9:0] ball_y = ball_fix_y[11:2];
 	reg[9:0] ball_vx = 0;
@@ -94,6 +95,7 @@ module ball
 
 	wire[9:0] dx = x-ball_x;
 	wire[9:0] dy = y-ball_y;
+	wire _unused_ok = &{dx[9:0], dy[9:0]};
 
 	assign out[7:0] =
 	          x < ball_x ? 0
@@ -105,12 +107,15 @@ module ball
 	wire[11:0] next_x = ball_fix_x + { {2{ball_vx[9]}}, ball_vx };
 	wire[11:0] next_y = ball_fix_y + { {2{ball_vy[9]}}, ball_vy };
 
+	wire[9:0] screen_half_x = (SCREEN_WIDTH -128)/2;
+	wire[9:0] screen_half_y = (SCREEN_HEIGHT-128)/2;
+
 	always @(posedge v_sync) begin
 		ball_fix_x <= next_x;
 		ball_fix_y <= next_y;
 
-		ball_vx <= ball_vx + (next_x < {(SCREEN_WIDTH -128)/2, 2'b0 } ? 1 : -1);
-		ball_vy <= ball_vy + (next_y < {(SCREEN_HEIGHT-128)/2, 2'b0 } ? 1 : -1);
+		ball_vx <= ball_vx + (next_x < { screen_half_x, 2'b0 } ? 1 : -1);
+		ball_vy <= ball_vy + (next_y < { screen_half_y, 2'b0 } ? 1 : -1);
 	end
 
 	initial begin

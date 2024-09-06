@@ -29,8 +29,6 @@ module tt_um_vga_example(
   // Suppress unused signals warning
   wire _unused_ok = &{ena, ui_in, uio_in};
 
-  reg [9:0] counter;
-
   hvsync_generator hvsync_gen(
     .clk(clk),
     .reset(~rst_n),
