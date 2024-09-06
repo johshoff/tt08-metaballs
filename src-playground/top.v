@@ -41,11 +41,11 @@ module tt_um_vga_example(
     .vpos(pix_y)
   );
 
-  wire o;
+  wire[1:0] o;
 
   assign R = 0;
   assign G = 0;
-  assign B = {o,o};
+  assign B = o;
 
   metaballs #(.SCREEN_WIDTH(640), .SCREEN_HEIGHT(480)) mb(
     o, vsync,

@@ -15,13 +15,14 @@ module tt_um_johshoff_metaballs (
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
 );
-  wire rgb, display;
+  wire display;
+  wire[1:0] rgb;
   wire[9:0] x;
   wire[9:0] y;
 
   wire h_sync;
   wire v_sync;
-  assign uo_out = {h_sync, rgb, rgb, rgb, v_sync, rgb, rgb, rgb};
+  assign uo_out = {h_sync, rgb[0], rgb[0], rgb[0], v_sync, rgb[1], rgb[1], rgb[1]};
   assign uio_out = 0;
   assign uio_oe = 0;
 
