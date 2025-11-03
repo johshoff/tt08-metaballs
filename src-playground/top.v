@@ -46,6 +46,7 @@ module tt_um_vga_example(
   assign B = {o,o};
 
   metaballs #(.SCREEN_WIDTH(640), .SCREEN_HEIGHT(480)) mb(
+    ~rst_n,
     o, vsync,
     video_active,
     pix_x,

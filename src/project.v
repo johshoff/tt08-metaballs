@@ -27,6 +27,7 @@ module tt_um_johshoff_metaballs (
   assign uio_oe = 0;
 
   metaballs mb(
+    ~rst_n,
     rgb, v_sync,
     display,
     x,

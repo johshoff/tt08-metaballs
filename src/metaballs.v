@@ -77,6 +77,7 @@ module ball
 	parameter SCREEN_HEIGHT = 480
 )
 (
+	input wire reset,
 	input wire[9:0] x,
 	input wire[9:0] y,
 	output wire[7:0] out,
@@ -85,12 +86,10 @@ module ball
 );
 	reg[7:0] bs[0:255];
 
-	/* verilator lint_off WIDTHTRUNC */
-	reg[9:0] ball_x = START_X;
-	/* verilator lint_off WIDTHTRUNC */
-	reg[9:0] ball_y = START_Y;
-	reg[9:0] ball_vx = 0;
-	reg[9:0] ball_vy = 0;
+	reg[9:0] ball_x;
+	reg[9:0] ball_y;
+	reg[9:0] ball_vx;
+	reg[9:0] ball_vy;
 
 	wire[9:0] dx = x-ball_x;
 	wire[9:0] dy = y-ball_y;
@@ -107,11 +106,20 @@ module ball
 	wire[9:0] next_y = ball_y + { {2{ball_vy[9]}}, ball_vy[9:2] };
 
 	always @(posedge v_sync) begin
-		ball_x <= next_x;
-		ball_y <= next_y;
+		if (reset) begin
+			/* verilator lint_off WIDTHTRUNC */
+			ball_x <= START_X;
+			/* verilator lint_off WIDTHTRUNC */
+			ball_y <= START_Y;
+			ball_vx <= 0;
+			ball_vy <= 0;
+		end else begin
+			ball_x <= next_x;
+			ball_y <= next_y;
 
-		ball_vx <= ball_vx + (next_x < (SCREEN_WIDTH -128)/2 ? 1 : -1);
-		ball_vy <= ball_vy + (next_y < (SCREEN_HEIGHT-128)/2 ? 1 : -1);
+			ball_vx <= ball_vx + (next_x < (SCREEN_WIDTH -128)/2 ? 1 : -1);
+			ball_vy <= ball_vy + (next_y < (SCREEN_HEIGHT-128)/2 ? 1 : -1);
+		end
 	end
 
 	initial begin
@@ -381,6 +389,7 @@ module metaballs
 	parameter SCREEN_HEIGHT = 600
 )
 (
+	input wire reset,
 	output wire rgb,
 	input wire v_sync,
 
@@ -389,9 +398,9 @@ module metaballs
 	input wire[9:0] y
 );
 	wire[7:0] out_0;
-	ball #(.SCREEN_WIDTH(SCREEN_WIDTH), .SCREEN_HEIGHT(SCREEN_HEIGHT), .START_X((SCREEN_WIDTH-128)*1/3), .START_Y((SCREEN_HEIGHT-128)*1/3)) b_0(x, y, out_0, v_sync);
+	ball #(.SCREEN_WIDTH(SCREEN_WIDTH), .SCREEN_HEIGHT(SCREEN_HEIGHT), .START_X((SCREEN_WIDTH-128)*1/3), .START_Y((SCREEN_HEIGHT-128)*1/3)) b_0(reset, x, y, out_0, v_sync);
 	wire[7:0] out_1;
-	ball #(.SCREEN_WIDTH(SCREEN_WIDTH), .SCREEN_HEIGHT(SCREEN_HEIGHT), .START_X((SCREEN_WIDTH-128)*19/30), .START_Y((SCREEN_HEIGHT-128)*12/30)) b_1(x, y, out_1, v_sync);
+	ball #(.SCREEN_WIDTH(SCREEN_WIDTH), .SCREEN_HEIGHT(SCREEN_HEIGHT), .START_X((SCREEN_WIDTH-128)*19/30), .START_Y((SCREEN_HEIGHT-128)*12/30)) b_1(reset, x, y, out_1, v_sync);
 
 	reg pix = 0;
 	always @(posedge x[0]) begin
